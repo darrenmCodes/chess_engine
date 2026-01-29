@@ -2,7 +2,7 @@ fn main() {
     let board = [
         ['r','n','b','q','k','b','n','r'],
         ['p','p','p','p','p','p','p','p'],
-        ['.','.','.','.','.','.','.','.'],
+        ['.','P','.','.','.','.','.','.'],
         ['.','.','.','.','.','.','.','.'],
         ['.','.','.','.','.','.','.','.'],
         ['.','.','.','.','.','.','.','.'],
@@ -19,7 +19,7 @@ fn main() {
         print!("\n")
     }
 
-    fn move_pawn_forward(board:[[char; 8]; 8], files:[char; 8]) {
+    fn generate_move_pawn_forward(board:[[char; 8]; 8], files:[char; 8]) {
         for i in 0..board.len() {
             for j in 0..board[i].len() {
                 if board[i][j] == 'p' {
@@ -57,5 +57,36 @@ fn main() {
         }
     }
 
-    move_pawn_forward(board, files);
+    fn generate_pawn_capture_diagonal(board: [[char; 8]; 8], files: [char; 8]) {
+        for i in 0..board.len() {
+            for j in 0..board[i].len() {
+                if board[i][j] == 'P' && i > 0 && j > 0 && board[i-1][j-1].is_lowercase() {
+                    let coordinate = files[j].to_string() + &(board[i].len() - i).to_string();
+                    let new_coordinate = files[j-1].to_string() + &(board[i].len() - i + 1).to_string();
+                    println!("{} -> {}", coordinate, new_coordinate);
+                }
+
+                if board[i][j] == 'P' && i > 0 && j < 7 && board[i-1][j+1].is_lowercase() {
+                    let coordinate = files[j].to_string() + &(board[i].len() - i).to_string();
+                    let new_coordinate = files[j+1].to_string() + &(board[i].len() - i + 1).to_string();
+                    println!("{} -> {}", coordinate, new_coordinate);
+                }
+
+                if board[i][j] == 'p' && i < 7 && j > 0 && board[i+1][j-1].is_uppercase() {
+                    let coordinate = files[j].to_string() + &(board[i].len() - i).to_string();
+                    let new_coordinate = files[j-1].to_string() + &(board[i].len() - i - 1).to_string();
+                    println!("{} -> {}", coordinate, new_coordinate);
+                }
+
+                if board[i][j] == 'p' && i < 7 && j < 7 && board[i+1][j+1].is_uppercase() {
+                    let coordinate = files[j].to_string() + &(board[i].len() - i).to_string();
+                    let new_coordinate = files[j+1].to_string() + &(board[i].len() - i - 1).to_string();
+                    println!("{} -> {}", coordinate, new_coordinate);
+                }
+            }
+        }
+    }
+
+    //generate_move_pawn_forward(board, files);
+    generate_pawn_capture_diagonal(board, files);
 }
